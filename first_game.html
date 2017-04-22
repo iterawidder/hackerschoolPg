@@ -41,18 +41,41 @@
     
     world.circleBody(500, -100, 10, false, "blue");
     
-    world.circleBody(500, 300, 100, true, "blue");
+    /*world.circleBody(500, 300, 100, true, "blue");*/
     
     var rect = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 30, true, "yellow");
-    world.rotateBodyByDegree(rect, 30);
-    world.onTouch(function(x ,y) {
-         world.circleBody(x, y, 10, false, "blue");
+    world.rotateBodyByDegree(rect, 180);
+    world.onTouch(function() {
+        world.applyYForceToBody(circle, -.005)
+       
     })
-    
+    var gameover = false;
+        var circle = world.circleBody(500, -500, 10, false, "blue");
+        world.on2BodiesCollisionStart(circle, rect, function() {
+            if(gameover == false) {
+                 world.showSplash("game over");
+                 world.speek("game over", 4);
+                 gameover = true;
+                 
+            }
+        })
+        
     setInterval(function() {
     world.rotateBodyByDegree(rect, 1);
 
     }, 100)
+
+    
+    var rect2 = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 30, true, "yellow");
+    world.rotateBodyByDegree(rect2, 90)
+    setInterval(function() {
+    world.rotateBodyByDegree(rect2, 1);
+
+    }, 100)
+
+
+
+
 </script>
 
 
