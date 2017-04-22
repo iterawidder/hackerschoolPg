@@ -39,25 +39,26 @@
         /* global World */
 
         var world = new World();
-        var Ziel = world.rectangleBody(world.getWidth()/6, world.getHeight()/2, 100, 30)
+
+        var Ziel = world.rectangleBody(world.getWidth() / 6, world.getHeight() / 1, 100, 30, true)
 
 
         var Balken = world.rectangleBody(world.getWidth() / 2, world.getHeight() * 3 / 4, world.getWidth() / 2, 30, true, "red");
         world.rotateBodyByDegree(Balken, 90);
-    
+
         world.onTouch(function(x, y) {
             var fertig = false
-            var Kugel = setInterval(function(){
-                
+            var Kugel = setInterval(function() {
+
                 world.circleBody(x, y, 10, false, "green");
-                 world.on2BodiesCollisionStart(Kugel, Balken, function() {
-                if (fertig == false) {
-                    world.showSplash("RIP");
-                    world.speek("Ja RIP!", 1);
-                    fertig = true
-                }
-            }, 1) 
-           
+                world.on2BodiesCollisionStart(Kugel, Balken, function() {
+                    if (fertig == false) {
+                        world.showSplash("RIP");
+                        world.speek("Ja RIP!", 1);
+                        fertig = true
+                    }
+                }, 1)
+
             })
 
         })
@@ -68,13 +69,15 @@
 
 
         });
-        function nachlinks(){
+
+        function nachlinks() {
             world.moveBody(Ziel, 10, 0, world.getHeight()).then(nachrechts())
         }
-       function nachrechts(){
+
+        function nachrechts() {
             world.moveBody(Ziel, 10, world.getWidth(), world.getHeight()).then(nachlinks())
-        } 
-   <script>
+        }
+    </script>
 
 </body>
 
