@@ -43,15 +43,12 @@
     
     var Balken = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth()/2, 30, true, "red");
     world.rotateBodyByDegree(Balken, 90);
-    
+    world.onTouch(function(x, y) {
+        world.circleBody(x, y, 10, false, "green");
+    })
     setInterval(function() {
         world.rotateBodyByDegree(Balken, 3);
     }, 1)
-    setInterval(function() {
-        world.onTouch(function(x, y) {
-        world.circleBody(x, y, 10, false, "green");
-    })
-    })
 </script>
 
 </body>
