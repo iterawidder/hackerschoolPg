@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
-    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
 
     <script src="./lib/touch-emulator.js"></script>
     <script src="./lib/matter.js"></script>
@@ -28,31 +29,53 @@
     </style>
 
 </head>
+
 <body>
 
-<svg id="field"></svg>
+    <svg id="field"></svg>
 
-<script>
+    <script>
+        /* global _ */
+        /* global World */
 
-    /* global _ */
-    /* global World */
+        var world = new World();
+        var Ziel = world.rectangleBody(world.getWidth()/6, world.getHeight()/2, 100, 30)
 
-    var world = new World();
+
+        var Balken = world.rectangleBody(world.getWidth() / 2, world.getHeight() * 3 / 4, world.getWidth() / 2, 30, true, "red");
+        world.rotateBodyByDegree(Balken, 90);
     
-    
-    
-    var Balken = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth()/2, 30, true, "red");
-    world.rotateBodyByDegree(Balken, 90);
-    world.onTouch(function(x, y) {
-        world.circleBody(x, y, 10, false, "green");
-    })
-    setInterval(function() {
-        world.rotateBodyByDegree(Balken, 3);
-    }, 1)
-    setInterval(function{
-        world.circleBody(x, y, 10, false, "green");
-    }.5)
-</script>
+        world.onTouch(function(x, y) {
+            var fertig = false
+            var Kugel = setInterval(function(){
+                
+                world.circleBody(x, y, 10, false, "green");
+                 world.on2BodiesCollisionStart(Kugel, Balken, function() {
+                if (fertig == false) {
+                    world.showSplash("RIP");
+                    world.speek("Ja RIP!", 1);
+                    fertig = true
+                }
+            }, 1) 
+           
+            })
+
+        })
+
+
+        setInterval(function() {
+            world.rotateBodyByDegree(Balken, 3)
+
+
+        });
+        function nachlinks(){
+            world.moveBody(Ziel, 10, 0, world.getHeight()).then(nachrechts())
+        }
+       function nachrechts(){
+            world.moveBody(Ziel, 10, world.getWidth(), world.getHeight()).then(nachlinks())
+        } 
+   <script>
 
 </body>
+
 </html>
