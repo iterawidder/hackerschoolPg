@@ -39,11 +39,28 @@
 
     var world = new World();
     
-    
-    world.circleBody(500, -100, 10, false, "red" );
 
-    var rect = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 10, true, "red");
-    world.rotateBodyByDegree(rect, 23)
+    var rect1 = world.rectangleBody(337, world.getHeight()*3/4, 945, 10, true, "red");
+    world.rotateBodyByDegree(rect1, 23);
+    var rect2 = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, 99, 10, true, "yellow");
+    world.rotateBodyByDegree(rect2, 23);
+    var rect3 = world.rectangleBody(world.getWidth()/4, world.getHeight()*3/4, 243, 10, true, "purple");
+    world.rotateBodyByDegree(rect3, 23);
+    var rect4 = world.rectangleBody(world.getWidth()/8, world.getHeight()*3/4, 783, 10, true, "green");
+    world.rotateBodyByDegree(rect4, 23);
+    var rect5 = world.rectangleBody(937, world.getHeight()*3/4, 832, 10, true, "blue");
+    world.rotateBodyByDegree(rect5, 23);
+    var rect6 = world.rectangleBody(545, world.getHeight()*3/4, 993, 10, true, "black");
+    world.rotateBodyByDegree(rect6, 23);
+    var rect7 = world.rectangleBody(world.getWidth()/7, world.getHeight()*3/4, 98, 10, true, "apricot");
+    world.rotateBodyByDegree(rect7, 23);
+    var rect8 = world.rectangleBody(world.getWidth()/3, world.getHeight()*3/8, 147, 10, true, "orange");
+    world.rotateBodyByDegree(rect8, 23);
+    var rect9 = world.rectangleBody(world.getWidth()/5, world.getHeight()*3/4, 564, 10, true, "turqouise");
+    world.rotateBodyByDegree(rect9, 23);
+    var rect10 = world.rectangleBody(235, world.getHeight()*3/4, 434, 10, true, "pink");
+    world.rotateBodyByDegree(rect10, 23);
+    
     
     world.onTouch(function(x, y){
     world.circleBody(x, y, 10, false, "red" );
@@ -52,9 +69,18 @@
     
     
     setInterval(function(){
-    world.rotateBodyByDegree(rect, 165);
+        world.rotateBodyByDegree(rect1, 90);
+        world.rotateBodyByDegree(rect2, 10);
+        world.rotateBodyByDegree(rect3, 24);
+        world.rotateBodyByDegree(rect4, 23);
+        world.rotateBodyByDegree(rect5, 233);
+        world.rotateBodyByDegree(rect6, 95);
+        world.rotateBodyByDegree(rect7, 42);
+        world.rotateBodyByDegree(rect8, 345);
+        world.rotateBodyByDegree(rect9, 12);
+        world.rotateBodyByDegree(rect10, 87);
         
-    }, 1)
+    }, 10)
     
     
 </script>
