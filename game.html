@@ -49,6 +49,8 @@ function start(){
     world.rectangleBody(-250, world.getHeight()/2, 500, world.getHeight(), true, "grey");
     world.rectangleBody(world.getWidth()+250, world.getHeight()/2, 500, world.getHeight(), true, "grey");
     
+    circle.restitution = 0.9;
+    
     world.onRight(function (x, y, duration, touchLength) {
         world.applyXForceToBody(circle, 0.005);
     });
@@ -94,11 +96,19 @@ function start(){
     }
     
     var circle2 = world.circleBody(1500, world.getHeight()/2, 50, true, "red");
-     
+    
     function nachLinks1() {
-        world.moveBody(circle2, 0.001, 0, world.getHeight()/2, 3)
-        
+        world.moveBody(circle2, 0.001, 0, world.getHeight()/2, 3).then(function(){
+            nachRechts1();
+        }) 
+    
     }  
+    function nachRechts1() {
+        world.moveBody(circle2, 0.001, world.getWidth(), world.getHeight()/2, 3).then(function(){
+            nachLinks1();
+        })
+    }
+    
     
     world.on2BodiesCollisionStart(circle, circle2, function() {
             if(gameover == false) {
@@ -121,6 +131,8 @@ function start(){
 }
 
 start()
+
+
 </script>
 
 </body>
