@@ -324,14 +324,17 @@ var World = function(svgId) {
      * @param {number} toY - y coordinate to move to
      * @returns Promise that resolves, when the body has arrived
      */
-    this.moveBody = function(body, duration, toX, toY) {
+    this.moveBody = function(body, duration, toX, toY, step) {
+        if(step == null) {
+            step = 1;
+        }
         var finishedPromise = new SimplePromise();
         var currentX = body.position.x;
         var currentY = body.position.y;
         var _toX = (toX == null ? currentX : toX);
         var _toY = (toY == null ? currentY : toY);
 
-        moveRecursive(body, duration, _toX, _toY, finishedPromise);
+        moveRecursive(body, duration, _toX, _toY, finishedPromise, step);
         return finishedPromise.promise;
     };
 
@@ -363,20 +366,20 @@ var World = function(svgId) {
         return body;
     };
 
-    function moveRecursive(body, duration, toX, toY, promise) {
+    function moveRecursive(body, duration, toX, toY, promise, step) {
         var currentX = body.position.x;
         var currentY = body.position.y;
         var diffX = toX - currentX;
         var diffY = toY - currentY;
-        var directionX = Math.sign(diffX);
-        var directionY = Math.sign(diffY);
+        var directionX = Math.sign(diffX) * step;
+        var directionY = Math.sign(diffY) * step;
         if(Math.abs(diffX) < 2 && Math.abs(diffY) < 2) {
             promise.resolve();
         }
         else {
             Matter.Body.setPosition(body, {x: currentX + directionX, y: currentY + directionY});
             setTimeout(function () {
-                moveRecursive(body, duration, toX, toY, promise);
+                moveRecursive(body, duration, toX, toY, promise, step);
             }, duration);
         }
     }
@@ -767,7 +770,7 @@ var World = function(svgId) {
     };
 
     initSpeak().then(function () {
-        thisWorld.showSplash("world initialized");
+        //thisWorld.showSplash("world initialized");
     });
 
     startGc();

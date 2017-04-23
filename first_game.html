@@ -64,6 +64,7 @@
     
     var rect = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 30, true, "yellow");
     world.rotateBodyByDegree(rect, 180);
+    
     world.onTouch(function() {
         world.applyYForceToBody(circle, -.005)
         

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+function start(){
+    var world = new World();
+    
+    world.setYGravity(0);
+    world.setXGravity(0);
+    
+    var circle = world.circleBody(500, 500, 10, false, "blue");
+    
+    world.rectangleBody(world.getWidth()/2, -250, world.getWidth(), 500, true, "grey");
+    world.rectangleBody(world.getWidth()/2, world.getHeight()+250 , world.getWidth(), 500, true, "grey");
+    world.rectangleBody(-250, world.getHeight()/2, 500, world.getHeight(), true, "grey");
+    world.rectangleBody(world.getWidth()+250, world.getHeight()/2, 500, world.getHeight(), true, "grey");
+    
+    world.onRight(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(circle, 0.005);
+    });
+    
+    world.onLeft(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(circle, -0.005);
+    });
+
+    world.onUp(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(circle, -0.005);
+    });
+
+    world.onDown(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(circle, 0.005);
+    });
+    
+    var rect = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth()/5, 30, true, "red");
+    world.rotateBodyByDegree(rect, 180);
+    
+    var gameover = false;
+    
+    world.on2BodiesCollisionStart(circle, rect, function() {
+            if(gameover == false) {
+                 world.showSplash("game over");
+                 world.speak("game over", 4);
+                 gameover = true;
+                 world.removeBody(circle);
+                 world.removeBody(rect);
+                 world.removeBody(circle2);
+                 setTimeout(function() {
+                    start(); 
+                 }) 
+                 
+            }
+    })
+    function nachLinks() {
+        world.moveBody(rect, 10, 0, world.getHeight()*3/4) .then(function() {
+            nachRechts();
+        })
+    }
+    function nachRechts() {
+        world.moveBody(rect, 10, world.getWidth(), world.getHeight()).then(nachLinks);
+    }
+    
+    var circle2 = world.circleBody(1500, world.getHeight()/2, 50, true, "red");
+     
+    function nachLinks1() {
+        world.moveBody(circle2, 0.001, 0, world.getHeight()/2, 3)
+        
+    }  
+    
+    world.on2BodiesCollisionStart(circle, circle2, function() {
+            if(gameover == false) {
+                 world.showSplash("game over");
+                 world.speak("game over", 4);
+                 gameover = true;
+                 world.removeBody(circle);
+                 world.removeBody(rect);
+                 world.removeBody(circle2);
+                 setTimeout(function() {
+                    start(); 
+                 }) 
+                 
+            }
+    })
+    
+    nachLinks1()
+    
+    nachLinks()
+}
+
+start()
+</script>
+
+</body>
+</html>
