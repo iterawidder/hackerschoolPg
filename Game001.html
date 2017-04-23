@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Weiche den Bällen aus</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <svg id="field"></svg>
+
+    <script>
+        /* global _ */
+        /* global World */
+
+        var world = new World();
+        world.setYGravity(0.20);
+        world.backgroundColorFlash("black");
+
+        //Die Bälle
+        setInterval(function() {
+        var ball1 = world.circleBody(world.getWidth() / 2, -932, 45, false);
+        ball1.img = "img/Basketball.png";
+        var nice = false;
+        world.on2BodiesCollisionStart(ball1, vogel, function() {
+            if (nice == false) {
+                world.backgroundColorFlash("red");
+                world.speak("Fail", 7);
+                world.removeBody(ball1);
+                nice = true;
+            }
+        });
+        var fail = false;
+        world.on2BodiesCollisionStart(ball1, bar, function() {
+            if (fail == false) {
+                world.backgroundColorFlash("green");
+                world.speak("Yeah", 7);
+                world.removeBody(ball1);
+                fail = true;
+            }
+        });
+        }, 1000);
+        setInterval(function() {
+            var ball2 = world.circleBody(world.getWidth() / 3, -9403, 15, false);
+            ball2.img = "img/Federball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball2, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball2);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball2, bar, function() {
+                if (fail == false) {
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball2);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball3 = world.circleBody(750, -2032, 25, false);
+            ball3.img = "img/Football.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball3, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball3);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball3, bar, function() {
+                if (fail == false) {
+                    world.backgroundColorFlash("green");
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball3);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball4 = world.circleBody(1000, -4782, 30, false);
+            ball4.img = "img/fussball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball4, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball4);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball4, bar, function() {
+                if (fail == false) {
+                    world.backgroundColorFlash("green");
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball4);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball5 = world.circleBody(1500, -7822, 10, false);
+            ball5.img = "img/Golfball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball5, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball5);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball5, bar, function() {
+                if (fail == false) {
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball5);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball6 = world.circleBody(200, -627, 50, false);
+            ball6.img = "img/Medizinball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball6, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball6);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball6, bar, function() {
+                if (fail == false) {
+                    world.backgroundColorFlash("green");
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball6);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball7 = world.circleBody(700, -7123, 15, false);
+            ball7.img = "img/Tennisball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball7, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball7);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball7, bar, function() {
+                if (fail == false) {
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball7);
+                    fail = true;
+                }
+            });
+        }, 1000);
+        setInterval(function() {
+            var ball8 = world.circleBody(300, -242, 30, false);
+            ball8.img = "img/Volleyball.png";
+            var nice = false;
+            world.on2BodiesCollisionStart(ball8, vogel, function() {
+                if (nice == false) {
+                    world.backgroundColorFlash("red");
+                    world.speak("Fail", 7);
+                    world.removeBody(ball8);
+                    nice = true;
+                }
+            });
+            var fail = false;
+            world.on2BodiesCollisionStart(ball8, bar, function() {
+                if (fail == false) {
+                    world.backgroundColorFlash("green");
+                    world.speak("Yeah", 7);
+                    world.removeBody(ball8);
+                    fail = true;
+                }
+            });
+        }, 1000);
+
+        //Die untere Barrier
+        var bar = world.rectangleBody(world.getWidth() / 2, world.getHeight() + 40, world.getWidth(), 20, true, "black");
+        
+        var bar1 = world.rectangleBody(world.getWidth() * 1/3, world.getHeight() -300, 60, 20, true, "black");
+        var bar2 = world.rectangleBody(world.getWidth() * 2/3, world.getHeight() - 300, 60, 20, true, "black");
+        var bar3 = world.rectangleBody(world.getWidth() - 23, world.getHeight() / 2, 60, 20, true, "black");
+        var bar4 = world.rectangleBody( 23, world.getHeight() / 2, 50, 20, true, "black");
+        
+        setInterval(function() {
+            world.rotateBodyByDegree(bar1, 1);
+            world.rotateBodyByDegree(bar2, 1);
+            world.rotateBodyByDegree(bar3, 1);
+            world.rotateBodyByDegree(bar4, 1);
+        }, 100);
+        //Der Vogel am Pendel
+        var vogel = world.circleBody(world.getWidth() / 2, world.getHeight() * 3 / 4, 40, false);
+        vogel.img = "img/bird1Left.png";
+        world.hangBody(vogel, {
+            x: world.getWidth() / 2,
+            y: 0
+        });
+
+        //Den Vogel steuern
+        world.onTouch(function(y) {
+            if (y < world.getWidth() / 2) {
+                world.applyXForceToBody(vogel, -.012);
+            }
+            if (y > world.getWidth() / 2) {
+                world.applyXForceToBody(vogel, .012);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
