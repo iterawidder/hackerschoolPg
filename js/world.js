@@ -424,7 +424,10 @@ var World = function(svgId) {
      * @param {number} y - y coordinate of the text (default: height/2)
      * @param {string} className - CSS class (default: '')
      */
-    this.showSplash = function(message, fontSize, x, y, className) {
+    this.showSplash = function(message, fontSize, x, y, duration, className) {
+        if(duration == null) {
+            duration = 1000;
+        }
         if(className == null) {
             className = "";
         }
@@ -444,7 +447,10 @@ var World = function(svgId) {
         var id = uid();
 
         this.showText(id, message, x, y, fontSize, className);
-        this.removeText(id);
+        var that = this;
+        setTimeout(function() {
+            that.removeText(id);
+        }, duration);
     };
 
     this.showText = function(id, text, x, y, fontSize, className) {
@@ -457,7 +463,7 @@ var World = function(svgId) {
         gText.selectAll("text._" + id)
             .attr("x", x)
             .attr("y", y)
-            .style("font-size", fontSize + "em")
+            .style("font-size", fontSize)
             .text(text);
     };
 
@@ -767,7 +773,7 @@ var World = function(svgId) {
     };
 
     initSpeak().then(function () {
-        thisWorld.showSplash("world initialized");
+        //thisWorld.showSplash("world initialized");
     });
 
     startGc();

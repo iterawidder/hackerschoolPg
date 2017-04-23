@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+    
+    var gespunkte = 0
+    
+    var runde = 0
+    
+    function start() {
+        world.setYGravity(0.4);
+        
+        var punkte = 120000;
+        
+        setInterval(function(){
+            punkte-=1;
+            
+        }, 1);
+        
+        var land1 = _.random(30, 75);
+        var hub1 = _.random(100, 200);
+        
+        var ziel = world.rectangleBody(world.getWidth()/2, world.getHeight()-100, land1, 20, true, "olive");
+        var spieler = world.rectangleBody(_.random(0, world.getWidth()), _.random(0, 100), hub1, hub1/3 );
+            spieler.img = "img/hubschrauber.png";
+            
+            
+        //Handysteuerung
+        
+        world.onTouch(function(){
+            world.applyYForceToBody(spieler, -0.1);
+            
+        world.onLeft(function(){
+            world.applyXForceToBody(spieler, -0.01);
+            
+            
+        })
+            
+            
+        world.onRight(function(){
+            world.applyXForceToBody(spieler, 0.01);
+            
+            
+        })
+        
+        world.onUp(function(){
+           world.applyYForceToBody(spieler, -0.1);
+           
+          
+            
+            
+        })
+        
+        world.on2BodiesCollisionStart(ziel, spieler, function(){
+            var aufprall = spieler.speed;
+            console.log(aufprall);
+            var endpunkte = punkte/aufprall;
+            Math.round( endpunkte);
+            endpunkte = gespunkte + endpunkte;
+            console.log(endpunkte)
+            runde+=1
+            if (endpunkte/runde<10000) {
+                world.showSplash("Game Over!", null, null, null, null)
+            }
+            
+            else setTimeout(function()  {
+        start();
+    }, 45);
+        
+            
+            
+        });
+        
+        
+            
+        });
+        
+        
+    }
+    
+    world.showSplash("Willkommen! Versuche den Hubschraube möglichst sanft auf der Plattform zu landen. Nach jeder Stufe wird der Toleranzbereich verkleinert. Du musst noch sanfter und schneller landen.", 1, 300, null, 45, null);
+    
+    setTimeout(function()  {
+        start();
+    }, 45);
+    
+    
+    
+    
+    
+    
+    
+</script>
+
+</body>
+</html>
