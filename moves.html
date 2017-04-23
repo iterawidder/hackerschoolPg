@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+
+    world.setYGravity(0);
+    world.setXGravity(0);
+
+    var circle = world.circleBody(world.getWidth()/2, world.getHeight()/2, 20, false);
+    circle.img = "img/fussball.png";
+    circle.imgRotation = true;
+    circle.restitution = 0.9;
+
+    world.rectangleBody(world.getWidth()/2, 0, world.getWidth(), 50, true, "grey");
+    world.rectangleBody(world.getWidth()/2, world.getHeight(), world.getWidth(), 50, true, "grey");
+    world.rectangleBody(0, world.getHeight()/2, 50, world.getHeight(), true, "grey");
+    world.rectangleBody(world.getWidth(), world.getHeight()/2, 50, world.getHeight(), true, "grey");
+
+    world.onRight(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(circle, 0.01);
+    });
+    
+    world.onLeft(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(circle, -0.01);
+    });
+
+    world.onUp(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(circle, -0.01);
+    });
+
+    world.onDown(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(circle, 0.01);
+    });
+
+</script>
+
+</body>
+</html>
