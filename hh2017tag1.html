@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <svg id="field"></svg>
+
+    <script>
+        /* global _ */
+        /* global World */
+
+        var world = new World();
+
+        var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() * 3 / 4, world.getWidth(), 30, true, "red");
+        
+        var ziel = world.rectangleBody(world.getWidth() / 2, world.getHeight(), 200, 30, true, "green");
+        
+        function nachLinks() {
+            world.moveBody(ziel, 10, 0, world.getHeight()).then(function() {
+                nachRechts();
+            })
+        }
+        
+        function nachRechts() {
+            world.moveBody(ziel, 10, world.getWidth(), world.getHeight()).then(function() {
+                nachLinks();
+            })
+        }
+        
+        nachLinks();
+
+        var circle = world.circleBody(100, -500, 10, false, "blue");
+        circle.img = "img/fussball.png";
+        circle.imgRotation = true;
+        
+        var display = world.createDisplay("0", 100, 100, 4);
+        
+        setInterval(function() {
+            display.add(1);
+        }, 1000);
+
+        var habeSchonGeschrien = false;
+        world.on2BodiesCollisionStart(circle, rect, function() {
+            if (habeSchonGeschrien == false) {
+                world.showSplash("Auuuuuuuuuuuch!!!!");
+                world.speek("Auuuuuuuuuuuch", 15);
+                habeSchonGeschrien = true;
+            }
+        })
+        world.on2BodiesCollisionStart(circle, ziel, function() {
+            if (habeSchonGeschrien == false) {
+                world.showSplash("Juhuuu!!!!");
+                world.speek("Juhuuuu", 15);
+                habeSchonGeschrien = true;
+            }
+        })
+
+        world.onTouch(function() {
+            world.applyYForceToBody(circle, -.005);
+        });
+
+        setInterval(function() {
+            world.rotateBodyByDegree(rect, 1);
+        }, 100)
+    </script>
+
+</body>
+
+</html>
