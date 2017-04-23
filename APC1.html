@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
-    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
 
     <script src="./lib/touch-emulator.js"></script>
     <script src="./lib/matter.js"></script>
@@ -28,35 +29,61 @@
     </style>
 
 </head>
+
 <body>
 
-<svg id="field"></svg>
+    <svg id="field"></svg>
 
-<script>
+    <script>
+        /* global _ */
+        /* global World */
 
-    /* global _ */
-    /* global World */
+        var world = new World();
 
-    var world = new World();
-    
-   
-    var rect = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 20, true, "red")
-    
-    
-    world.onTouch(function(x,y){
-       world.circleBody(x, y, 10, false, "blue")   
-    });
-    
-    setInterval(function(){
-        world.rotateBodyByDegree(rect, 1)
-    }, 100)
-    
-    
-    
-    
-    
-    
-</script>
+
+        var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() * 3 / 4, world.getWidth(), 20, true, "yellow");
+        
+        var ziel = world.rectangleBody(world.getWidth() / 2, world.getHeight(), 200, 30, world.getWidth(), 20, true, "blue");
+        
+        function nachlinks(){
+            world.moveBody (ziel, 10, 0, world.getWidth()).then(function(){
+                nachRechts();
+            })
+            
+         function nachrechts(){
+            world.moveBody (ziel, 10, getWidth(), getHeight()).then(funtcion(){
+                nachLinks();
+            })
+                
+            
+            
+        }
+        
+       
+        var circle = world.circleBody(500, -500, 10, false, "blue");
+        var schonGameOver = false
+        world.on2BodiesCollisionStart(circle, rect, function() {
+            if (schonGameOver == false) {
+                world.showSplash("Game over");
+                world.speek("Game over", 6);
+                schonGameOver = true;
+
+            }
+
+        })
+
+
+        world.onTouch(function() {
+            world.applyYForceToBody(circle, -.008)
+            
+
+        });
+
+        setInterval(function() {
+            world.rotateBodyByDegree(rect, 1)
+        }, 100)
+    </script>
 
 </body>
+
 </html>
