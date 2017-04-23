@@ -491,7 +491,7 @@ var World = function(svgId) {
         function show() {
             thisWorld.showText(thisDisplay.id, thisDisplay.text, thisDisplay.x, thisDisplay.y, thisDisplay.fontSize, thisDisplay.className);
         }
-
+        
         /**
          * change the shown text
          * @param {string} text - new text to show

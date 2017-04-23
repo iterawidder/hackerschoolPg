@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+    world.setXGravity(0);
+    world.setYGravity(0);
+    var Kugel = world.circleBody(world.getWidth()/2, world.getHeight()/2, 30, false);
+    Kugel.img = "img/fussball.png";
+    Kugel.imgRotation = true;
+    Kugel.restitution = 5;
+    var Ende1 = world.rectangleBody(world.getWidth()/2, 0, world.getWidth(), 30, true, "blue");
+    var Ende2 = world.rectangleBody(world.getWidth()/2, world.getHeight(), world.getWidth(), 30, true, "blue");
+    var Ende3 = world.rectangleBody(0, world.getHeight()/2, 50, world.getHeight(), true, "blue");
+    var Ende4 = world.rectangleBody(world.getWidth(), world.getHeight()/2, 50, world.getHeight(), true, "blue");
+    var Verkakt = false;
+   
+    world.onRight(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(Kugel, 0.015);
+    });
+    world.onLeft(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(Kugel, -0.015);
+    });
+    world.onUp(function (x, y, duration, touchLength){
+        world.applyYForceToBody(Kugel, -0.015);
+    });
+    
+    
+    world.onDown(function (x, y, duration, touchLength){
+        world.applyYForceToBody(Kugel, 0.015);
+    });
+    var display = world.createDisplay("5", world.getWidth()/10, 100, 4);
+    var zahler2 = world.createDisplay("0", world.getWidth()/10*9, 100, 4);
+    
+ 
+    var Zähler = setInterval(function(){
+        display.add(-1);
+        if (display.text == "0"){
+            Verkakt = true;
+            world.showSplash("Game Over");
+            world.speak("Du Pischer bischt Rip, AMK!");
+            clearInterval(Zähler);
+        
+        }
+    }, 1000);
+    
+    world.on2BodiesCollisionStart(Kugel, Ende1, function(){
+        Ende1.color = "red"
+        if (Verkakt == false){
+        display.changeText(5);
+        zahler2.add(1);
+    }});
+    
+    world.on2BodiesCollisionStart(Kugel, Ende2, function(){
+        Ende2.color = "red"
+        if (Verkakt == false){
+        display.changeText(5);
+        zahler2.add(1);
+    }});
+    
+    world.on2BodiesCollisionStart(Kugel, Ende3, function(){
+        Ende3.color = "red"
+        if (Verkakt == false){
+        display.changeText(5);
+        zahler2.add(1);
+    }});
+    
+    world.on2BodiesCollisionStart(Kugel, Ende4, function(){
+        Ende4.color = "red"
+        if (Verkakt == false){
+        display.changeText(5);
+        zahler2.add(1);
+    }});
+    
+   
+</script>
+
+</body>
+</html>

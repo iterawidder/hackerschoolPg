@@ -142,9 +142,6 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         data.enter()
             .append("path")
             .attr("class", createClassNameFromBodyForDynamic)
-            .style("fill", function (d) {
-                return d.color != null ? d.color : "black";
-            })
             .style("stroke", function(d) {
                 return d.strokeColor != null ? d.strokeColor : "black";
             })
@@ -154,6 +151,9 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
 
         gDynamic.selectAll("path.dynamic")
+            .style("fill", function (d) {
+                return d.color != null ? d.color : "black";
+            })
             .attr("d", createPathFromBody);
 
         data.exit().remove();
