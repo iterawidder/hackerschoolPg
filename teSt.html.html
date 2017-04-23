@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
-    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
 
     <script src="./lib/touch-emulator.js"></script>
     <script src="./lib/matter.js"></script>
@@ -28,29 +29,55 @@
     </style>
 
 </head>
+
 <body>
 
-<svg id="field"></svg>
+    <svg id="field"></svg>
 
-<script>
+    <script>
+        /* global _ */
+        /* global World */
 
-    /* global _ */
-    /* global World */
+        var world = new World();
 
-    var world = new World();
-  world.circleBody(500,-100,50,false,"red")  
-  world.circleBody(200,-100,60,false,"blue") 
-  var z = world.rectangleBody(world.getWidth()/2,world.getHeight()/2,world.getWidth(),35,true,"purple")
-  var y = world.rectangleBody(world.getWidth()/2,world.getHeight()*3/4,world.getWidth(),35,true,"purple")
-  world.rotateBodyByDegree(z, 35)
-  
-  setInterval(function(){
-      world.rotateBodyByDegree(y, 1000000000000000000000000000000000000)
-  }, 01)
-  
-</script>
+        var Kreis = world.circleBody(world.getWidth() / 2, -100, 30, false, "brown")
+        var Vogel = world.circleBody(3, -100, 30, false, "brown")
+        world.circleBody(4, -100, 10, false, "brown")
+        world.circleBody(5, -100, 20, false, "brown")
+        world.circleBody(6, -100, 30, false, "brown")
+        world.circleBody(7, -100, 40, false, "brown")
+        world.circleBody(8, -100, 50, false, "brown")
+        var Balken = world.rectangleBody(world.getWidth() / 2, world.getHeight() / 2, world.getWidth() / 2, 35, true, "purple")
+        var Boden = world.rectangleBody(world.getWidth() / 2, world.getHeight(), 300, 50, true, "black")
+        Kreis.img = "img/fussball.png"
+        Vogel.img = "img/bird1Right.png"
 
+        function nachLinks() {
+           world.moveBody(Boden, 10, 0, world.getHeight()).then(nachRechts)
+        }
+
+        function nachRechts() {
+             world.moveBody(Boden, 0.1, world.getWidth(), world.getHeight()).then(nachLinks)
+        }
+        nachRechts()
+        
+        world.onTouch(function(x, y) {
+            world.circleBody(x, y, 10, false, "red")
+        })
+
+
+        setInterval(function() {
+            world.rotateBodyByDegree(Balken, 1)
+        }, 01)
+
+        world.on2BodiesCollisionStart(Balken, Kreis, function() {
+            world.showSplash("Jonny ist cooler als Liam")
+            world.speek("Autsch", 0)
+
+        })
+    </script>
 
 
 </body>
+
 </html>
