@@ -39,7 +39,26 @@
 
     var world = new World();
     
+    
+    var ziel = world.rectangleBody(world.getWidth()/2, world.getHeight(), 200, 30, true, "green");
+    
+    function nachLinks() {
+        world.moveBody(ziel, 10, 0, world.getHeight()).then(function() {
+            nachRechts();
+        })
+    }
+    function nachRechts() {
+        world.moveBody(ziel, 10, world.getWidth(), world.getHeight()).then(nachLinks);
+    }
     world.circleBody(500, -100, 10, false, "blue");
+    
+    nachLinks()
+    
+    var display = world.createDisplay("0", 100, 100, 4);
+    
+    setInterval(function() {
+        display.add(1);
+    }, 1000);
     
     /*world.circleBody(500, 300, 100, true, "blue");*/
     
@@ -47,10 +66,13 @@
     world.rotateBodyByDegree(rect, 180);
     world.onTouch(function() {
         world.applyYForceToBody(circle, -.005)
-       
+        
     })
     var gameover = false;
         var circle = world.circleBody(500, -500, 10, false, "blue");
+        circle.img = "img/fussball.png";
+        circle.imgRotation = true;
+        
         world.on2BodiesCollisionStart(circle, rect, function() {
             if(gameover == false) {
                  world.showSplash("game over");
@@ -66,13 +88,21 @@
     }, 100)
 
     
-    var rect2 = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 30, true, "yellow");
+    /*var rect2 = world.rectangleBody(world.getWidth()/2, world.getHeight()*3/4, world.getWidth(), 30, true, "yellow");
     world.rotateBodyByDegree(rect2, 90)
     setInterval(function() {
     world.rotateBodyByDegree(rect2, 1);
 
-    }, 100)
-
+    }, 100)*/
+    var Ziel = false 
+    world.on2BodiesCollisionStart(circle, ziel, function() {
+            if(Ziel == false) {
+                 world.showSplash("win");
+                 world.speek("win", 4);
+                 Ziel  = true;
+                 
+            }
+    })
 
 
 
