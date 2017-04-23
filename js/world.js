@@ -29,6 +29,12 @@ var World = function(svgId) {
     var gDynamic = svg.append("g");
     var gText = svg.append("g");
 
+    this.KEY_LEFT = 37;
+    this.KEY_UP = 38;
+    this.KEY_RIGHT = 39;
+    this.KEY_DOWN = 40;
+    this.KEY_SPACE = 32;
+
     var engine = Matter.Engine.create();
 
     Matter.Engine.run(engine);
@@ -40,6 +46,94 @@ var World = function(svgId) {
 
     this.getEngine = function () {
         return engine;
+    };
+
+    this.onKey = function(func, key) {
+      document.addEventListener('keydown', function(event){
+        if (key === undefined || event.keyCode === key) {
+           func(event.keyCode);
+        }
+      })
+    }
+
+    this.onRight = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        this.onKey(func, this.KEY_RIGHT);
+        function touchMoveRight(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[0]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[0] > 0 && touchVec[1] == 0) {
+                touchMoveRight(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[0] > 0) {
+                if(Math.abs(touchVec[0] / touchVec[1]) > quot) {
+                    touchMoveRight(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onLeft = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        this.onKey(func, this.KEY_LEFT);
+        function touchMoveLeft(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[0]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[0] < 0 && touchVec[1] == 0) {
+                touchMoveLeft(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[0] < 0) {
+                if(Math.abs(touchVec[0] / touchVec[1]) > quot) {
+                    touchMoveLeft(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onUp = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        this.onKey(func, this.KEY_UP);
+        function touchMoveUp(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[1]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[1] < 0 && touchVec[0] == 0) {
+                touchMoveUp(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[1] < 0) {
+                if(Math.abs(touchVec[1] / touchVec[0]) > quot) {
+                    touchMoveUp(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onDown = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        this.onKey(func, this.KEY_DOWN);
+        function touchMoveDown(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[1]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[1] > 0 && touchVec[0] == 0) {
+                touchMoveDown(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[1] > 0) {
+                if(Math.abs(touchVec[1] / touchVec[0]) > quot) {
+                    touchMoveDown(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
     };
 
     /**
@@ -121,16 +215,27 @@ var World = function(svgId) {
     };
 
     /**
-     * pin a body with 2 stick
+     * hang a body with 2 stick
      * @param {Body} body - body to pin
      * @param {Point} pointB1 - end point of stick 1
      * @param {Point} pointB2 - end point of stick 2
      * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
      */
-    this.pinBody = function(body, pointB1, pointB2, pointA) {
+    this.hang2Body = function(body, pointB1, pointB2, pointA) {
         var constraint1 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB1});
         var constraint2 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB2});
         Matter.World.add(engine.world, [constraint1, constraint2]);
+    };
+
+    /**
+     * hang a body on the wall with a stick
+     * @param {Body} body - body to pin
+     * @param {Point} pointB - end point of stick
+     * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
+     */
+    this.hangBody = function(body, pointB, pointA) {
+        var constraint = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB});
+        Matter.World.add(engine.world, [constraint]);
     };
 
     /**
@@ -142,7 +247,7 @@ var World = function(svgId) {
     this.rotateBodyByDegree = function (body, angle) {
         Matter.Body.rotate(body, angle / 180 * Math.PI);
     };
-    
+
     /**
      * Rotate a body by an angle in radiant (0 - 2 * Math.PI)
      *
