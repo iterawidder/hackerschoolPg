@@ -55,9 +55,10 @@
             }, 1);
 
             var land1 = _.random(30, 75);
-            var hub1 = _.random(100, 200);
+            
 
             var ziel = world.rectangleBody(world.getWidth() / 2, world.getHeight() - 100, land1, 20, true, "olive");
+            var hub1 = _.random(100, 200);
             var spieler = world.rectangleBody(_.random(0, world.getWidth()), _.random(0, 100), hub1, hub1 / 3);
             spieler.img = "img/hubschrauber.png";
 
@@ -95,9 +96,10 @@
                     Math.round(endpunkte);
                     endpunkte = gespunkte + endpunkte;
                     console.log(endpunkte)
-                    runde += 1
+                     world.showSplash(endpunkte , null, null, null, null)
+                    
                     if (endpunkte / runde < 10000) {
-                        world.showSplash("Game Over!", null, null, null, null)
+                       
                     }
 
                     else {
@@ -105,6 +107,7 @@
                             start();
                         }, 45);
                         world.removeBody(spieler)
+                        runde += 1
                     }
 
 
