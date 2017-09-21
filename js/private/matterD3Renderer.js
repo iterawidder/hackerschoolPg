@@ -24,22 +24,6 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         return body.title != null;
     }
 
-    function createPathFromBody(d) {
-        var pathStr = "";
-        if(d.vertices.length > 0) {
-            pathStr += "M" + d.vertices[0].x + " " + d.vertices[0].y;
-            if(d.vertices.length > 1) {
-                var i;
-                for(i = 1; i < d.vertices.length; i++) {
-                    pathStr += " L" + d.vertices[i].x + " " + d.vertices[i].y;
-                }
-            }
-        }
-        pathStr += " Z";
-
-        return pathStr;
-    }
-
     function createClassNameFromBody(d, defaultClassName) {
         if(d.className != null) {
             return defaultClassName + " " + d.className;
@@ -154,7 +138,12 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
 
         gDynamic.selectAll("path.dynamic")
-            .attr("d", createPathFromBody);
+            .attr("d", function (d) {
+                var path = "M " + d.vertices.map(function (v) {
+                        return v.x + " " + v.y;
+                    }).join(" L") + " Z";
+                return path;
+            });
 
         data.exit().remove();
     }
