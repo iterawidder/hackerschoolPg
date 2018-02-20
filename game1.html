@@ -40,40 +40,18 @@
     
     
     var world = new World();
-    world.setYGravity(0.75);
-    world.setXGravity(0.1);
-    
-    var schrei = false
-    
-    
-    
-    
-    var spieler = world.circleBody(0, 0, 20, false, "red");
-    spieler.img = "img/fussball.png";
-    
-    var hind1 = world.rectangleBody(400, 0, 20, world.getHeight()*1.5, true, "red");
+var version = "0.1";
+function rud() {
 
-
-
-
-
-world.on2BodiesCollisionStart(hind1, spieler, function(){
-    world.showSplash("Schade!");
-    if (schrei == false)
-        world.speak ("Schade", 1)
-        schrei = true
-    
-});    
-
-
-
-
-
-world.onTouch(function() {
-            world.applyYForceToBody(spieler, -.05);
+var ziel = world.rectangleBody(world.getWidth() / 2, world.getHeight() - 100, 20, true, "olive");
+ 
+}
+rud();
 
     
-});
+    
+    
+    
             
     
     
